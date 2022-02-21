@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+session="research-and-notes"
+
+tmux new-session -d -s $session
+
+window=1
+tmux rename-window -t $session:$window 'notes'
+tmux send-keys -t $session:$window 'vw' C-m
+
+window=2
+tmux new-window -t $session:$window -n 'term'
+
+window=3
+tmux new-window -t $session:$window -n 'scribble'
+tmux send-keys -t $session:$window 'nvim /tmp/foo' C-m
+
+window=1
+tmux attach-session -t $session:$window

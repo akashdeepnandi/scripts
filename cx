@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+nx=$HOME/scripts/$1
+echo -e "#!/usr/bin/bash\n\n" > $nx
+chmod +x $nx
+nvim $nx

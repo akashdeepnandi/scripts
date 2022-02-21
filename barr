@@ -1,0 +1,43 @@
+#!/usr/bin/bash
+contacts=$(cat <<EOF 
+Akashdeep Nandi,akash@gmail.com,acme
+lev kurusa,lev@gmail.com,acme
+elliot alderson,elliot@gmail.com,mr robot
+darlene alderson,darlene@gmail.com,mr robot
+elijah mikaelson,elijah@gmail.com,originals
+niklaus mikaelson,niklaus@gmail.com,originals
+rebacca mikaelson,rebacca@gmail.com,originals
+kole mikaelson,kole@gmail.com,originals
+freya mikaelson,freya@gmail.com,originals
+stefan salvatore,stefan@gmail.com,vampire diaries
+damon salvatore,damon@gmail.com,vampire diaries
+jake peralta,jake@gmail.com,b-99
+charles boyle,charles@gmail.com,b-99
+raymond holt,raymond@gmail.com,b-99
+terry jeffords,terry@gmail.com,b-99
+rosa diaz,rosa@gmail.com,b-99
+amy santiago,amy@gmail.com,b-99
+barney stinson,barney@gmail.com,HIMYM
+ted mosby,ted@gmail.com,HIMYM
+marshal erikson,marshal@gmail.com,HIMYM
+EOF
+)
+
+
+
+echo "${contacts}" | while IFS= read -r line;
+do 
+  name="$(echo "${line}" | cut -d',' -f1)"
+  email="$(echo "${line}" | cut -d',' -f2)"
+  company="$(echo "${line}" | cut -d',' -f3)"
+
+
+  echo "(curl -s -k -X $'POST' \
+    -H $'Host: localhost:55000' -H $'Content-Length: 66' -H $'Sec-Ch-Ua: \"Chromium\";v=\"97\", \" Not;A Brand\";v=\"99\"' -H $'Sec-Ch-Ua-Mobile: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux\"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch-Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9' \
+    -b $'_boilerplate_key=SFMyNTY.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5qQXlOakk0Tml3aWFXRjBJam94TmpRek5qQTNNRGcyTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SWpaaE5qUTNNVEkzTFRCbVpXUXRORFZoTlMxaU1XRmtMVGc0WWpjMlpXUTBPR1JsTlNJc0ltNWlaaUk2TVRZME16WXdOekE0TlN3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LkpZWTd4Q0dmQnRQN2JFRUJMeG1ISmdKYktUU2kyQmtPanc2cl8yLVhJSkljWHFNcDB2UjF6SzNlb2FrNHh6UzRoV2dwYWVRbzRMckpOeVhnanVUYjN3.HCCpSx8CN67bbxSzhkXhyOUAj_1WJKuTIql97Jtkk7g' \
+    --data-binary "{\"name\":`$name`,\"organization\":`$company`,\"email\":`$email`}" \
+    $'https://localhost:55000/n/api/v1/recipient')"
+
+  echo "$name - $email - $company - added"
+done
+

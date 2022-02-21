@@ -1,0 +1,45 @@
+#!/usr/bin/bash
+for j in {1..3}
+do
+  for i in {21..30}
+  do
+    # x="$(curl -s -k -X $'POST'     -H $'Host: localhost:55000' -H $'Content-Length: 35' -H $'Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\"' -H $'Sec-Ch-Ua-Mobil e: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux \"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch
+    # -Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9'     -b $'_boilerplate_key=SFMyNT
+    # Y.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aW
+    # 3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aW
+    # FXRj>Jam94TmpRek1UYzRORGcxTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SW1VNFl6a3hZelUyTFRKaE16VXROR00wTmkxaFptSmpMVFE0Wmpoak9UY3hNRFUyWVNJc0ltNWlaaUk2TVRZME16RTNPRFE0Tk
+    # N3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LlViTXhad19SV25BR0tlRjdDcXFfYUNfVzRHTHc3aXFCd1F3SXp5OXdXVy04Qk9jY2ZxTFJDRV9pWUp2R3FiTmdPOHJoOGVGY2x3amlDVDBSaWU1Uk1n.wxRd-YMpD
+    # aCSzeUviYcU8kOPgl1ZwpOnwyBwn8OnTxo'     --data-binary $"{\"recipientId\":\"$i\",\"packageId\":\"1\"}"     $'https://localhost:55000/n/api/v1/contents' | jq '.id')"
+    # conditions, we want j=1-10 for i=10.0 -> j >= 1 and j <=10 and i = 10
+    cl=36
+    if ((j==10)); then cl=37; fi;
+
+    # if (((j>=1 && j<=10 && i==10)) || ((i>=3 && i<=9 && j==10)));
+    # then 
+      # echo "i:$i j:$j cl: $cl";
+    x="$(curl -s -k -X $'POST'     -H $'Host: localhost:55000' -H "Content-Length: $cl" -H $'Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\"' -H $'Sec-Ch-Ua-Mobile: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux\"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch-Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9'     -b $'_boilerplate_key=SFMyNTY.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aWFXRjBJam94TmpRek1UYzRORGcxTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SW1VNFl6a3hZelUyTFRKaE16VXROR00wTmkxaFptSmpMVFE0Wmpoak9UY3hNRFUyWVNJc0ltNWlaaUk2TVRZME16RTNPRFE0TkN3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LlViTXhad19SV25BR0tlRjdDcXFfYUNfVzRHTHc3aXFCd1F3SXp5OXdXVy04Qk9jY2ZxTFJDRV9pWUp2R3FiTmdPOHJoOGVGY2x3amlDVDBSaWU1Uk1n.wxRd-YMpDaCSzeUviYcU8kOPgl1ZwpOnwyBwn8OnTxo'     --data-binary "{\"recipientId\":\"$i\",\"packageId\":\"$j\"}"     $'https://localhost:55000/n/api/v1/contents' | jq ".id")"
+    cl1=17;
+    if ((x > 10)); then cl1=18; fi;
+    if ((x > 100)); then cl1=19; fi;
+    curl  -s -k -X $'POST' \
+    -H $'Host: localhost:55000' -H "Content-Length: $cl1" -H $'Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\"' -H $'Sec-Ch-Ua-Mobile: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux\"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch-Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9' \
+    -b $'_boilerplate_key=SFMyNTY.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aWFXRjBJam94TmpRek1UYzRORGcxTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SW1VNFl6a3hZelUyTFRKaE16VXROR00wTmkxaFptSmpMVFE0Wmpoak9UY3hNRFUyWVNJc0ltNWlaaUk2TVRZME16RTNPRFE0TkN3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LlViTXhad19SV25BR0tlRjdDcXFfYUNfVzRHTHc3aXFCd1F3SXp5OXdXVy04Qk9jY2ZxTFJDRV9pWUp2R3FiTmdPOHJoOGVGY2x3amlDVDBSaWU1Uk1n.wxRd-YMpDaCSzeUviYcU8kOPgl1ZwpOnwyBwn8OnTxo' \
+    --data-binary "{\"contentsId\":$x}" \
+    $'https://localhost:55000/n/api/v1/assignment'
+    echo "CL: $j, Recp: $i, CID: $x - done, cl1: $cl1"
+    # fi;
+
+    # if ((i>=3 && i<=9 && j==10));then echo "i:$i j:$j cl: $cl";fi;
+    # conditions, we want j=10, we want i=3-9 -> j=10 and i >= 3 and i <=9
+    # cl="$(if [[ 10 -le $y ]]; then   echo 36; else   echo 35; fi)"
+    # x="$(curl -s -k -X $'POST'     -H $'Host: localhost:55000' -H $'Content-Length: 35' -H $'Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\"' -H $'Sec-Ch-Ua-Mobile: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux\"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch-Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9'     -b $'_boilerplate_key=SFMyNTY.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aWFXRjBJam94TmpRek1UYzRORGcxTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SW1VNFl6a3hZelUyTFRKaE16VXROR00wTmkxaFptSmpMVFE0Wmpoak9UY3hNRFUyWVNJc0ltNWlaaUk2TVRZME16RTNPRFE0TkN3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LlViTXhad19SV25BR0tlRjdDcXFfYUNfVzRHTHc3aXFCd1F3SXp5OXdXVy04Qk9jY2ZxTFJDRV9pWUp2R3FiTmdPOHJoOGVGY2x3amlDVDBSaWU1Uk1n.wxRd-YMpDaCSzeUviYcU8kOPgl1ZwpOnwyBwn8OnTxo'     --data-binary "{\"recipientId\":\"$i\",\"packageId\":\"$j\"}"     $'https://localhost:55000/n/api/v1/contents' | jq ".id")"
+    # curl  -s -k -X $'POST' \
+    # -H $'Host: localhost:55000' -H $'Content-Length: 17' -H $'Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\"' -H $'Sec-Ch-Ua-Mobile: ?0' -H $'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' -H $'Sec-Ch-Ua-Platform: \"Linux\"' -H $'Content-Type: application/json' -H $'Accept: */*' -H $'Origin: https://localhost:55000' -H $'Sec-Fetch-Site: same-origin' -H $'Sec-Fetch-Mode: cors' -H $'Sec-Fetch-Dest: empty' -H $'Referer: https://localhost:55000/n/requestor' -H $'Accept-Encoding: gzip, deflate' -H $'Accept-Language: en-US,en;q=0.9' \
+    # -b $'_boilerplate_key=SFMyNTY.g3QAAAABbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAVRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUppYjJsc1pYSndiR0YwWlNJc0ltVjRjQ0k2TVRZME5UVTVOelk0TlN3aWFXRjBJam94TmpRek1UYzRORGcxTENKcGMzTWlPaUppYjJsc1pYSndiR0YwWlNJc0ltcDBhU0k2SW1VNFl6a3hZelUyTFRKaE16VXROR00wTmkxaFptSmpMVFE0Wmpoak9UY3hNRFUyWVNJc0ltNWlaaUk2TVRZME16RTNPRFE0TkN3aWMzVmlJam9pTVNJc0luUjVjQ0k2SW1GalkyVnpjeUo5LlViTXhad19SV25BR0tlRjdDcXFfYUNfVzRHTHc3aXFCd1F3SXp5OXdXVy04Qk9jY2ZxTFJDRV9pWUp2R3FiTmdPOHJoOGVGY2x3amlDVDBSaWU1Uk1n.wxRd-YMpDaCSzeUviYcU8kOPgl1ZwpOnwyBwn8OnTxo' \
+    # --data-binary "{\"contentsId\":$x}" \
+    # $'https://localhost:55000/n/api/v1/assignment'
+    # echo "CL: $j, R: $i, CID: x - done"
+  done
+done
+
+

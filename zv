@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+name=`date "+%Y%m%d%H%M%S"`
+nvim  -c "normal I# ${name} " -c "startinsert!" $name.md

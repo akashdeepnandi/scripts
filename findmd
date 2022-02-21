@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+cd $HOME/notes
+files=`grep "file" * 2>/dev/null | cut -d":" -f1 | sort -u`
+echo "$files" | nl
+read -p "Select :" option; 
+
+echo "$files" | awk -v x="$option" 'BEGIN{OFS="";} NR==x{print "[  ](",$1,")";}'
+
