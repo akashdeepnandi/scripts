@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 contacts=$(cat <<EOF 
 Akashdeep Nandi,akash@gmail.com,acme
 lev kurusa,lev@gmail.com,acme

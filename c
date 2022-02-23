@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 data=""
 
@@ -10,4 +10,12 @@ fi
 
 
 echo "$data"
-echo "$data" | xclip -selection clipboard
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # ...
+  echo "$data" | xclip -selection clipboard
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  echo "$data" | pbcopy
+fi
+

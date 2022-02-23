@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 cd $HOME/notes
 if [ $# -eq 0 ]

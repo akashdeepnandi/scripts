@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env env bash
 cd $HOME/code/boilerplate/app
 
 session="bpdev"

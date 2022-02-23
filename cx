@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 nx=$HOME/scripts/$1
 echo -e "#!/usr/bin/bash\n\n" > $nx
