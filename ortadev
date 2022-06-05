@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+cd $HOME/code/projects/orta
+
+session="orta"
+
+tmux new-session -d -s $session
+
+window=1
+tmux rename-window -t $session:$window 'code'
+tmux send-keys -t $session:$window 'nvim' C-m
+tmux split-window -v -p 35
+tmux selectp -t 2
+tmux send-keys -t $session:$window 'docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d; docker logs orta-node-api-1 -f;' C-m
+
+window=2
+tmux new-window -t $session:$window -n 'term'
+#
+# window=3
+# tmux new-window -t $session:$window -n 'server'
+# # tmux send-keys -t $session:$window 'docker-compose up' C-m
+#
+# window=4
+# tmux new-window -t $session:$window -n 'iex'
+# # tmux send-keys -t $session:$window 'iex' C-m
+
+window=1
+tmux attach-session -t $session:$window

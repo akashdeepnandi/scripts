@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+dir="$(\ls -p | grep 'ub')"
+
+ls $dir | while read -r sub_folder; do
+  sub="$(ls $dir/$sub_folder | head -1)";
+  # echo $sub;
+  cp $dir$sub_folder/$sub ./$sub_folder.srt
+done

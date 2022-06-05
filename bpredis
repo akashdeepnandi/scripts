@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "new_ui"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "internal_development"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "recipient_use_fill_popup"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "requestor_allow_template_creation"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "requestor_allow_checklist_creation"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "requestor_allow_template_edit"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli SADD "fun_with_flags" "requestor_allow_checklist_edit"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:new_ui" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:internal_development" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:recipient_use_fill_popup" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:requestor_allow_checklist_creation" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:requestor_allow_template_creation" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:requestor_allow_checklist_edit" "boolean" "true"';
+docker exec -it app-redis-1 /bin/bash -c 'redis-cli HMSET  "fun_with_flags:requestor_allow_template_edit" "boolean" "true"';

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 name=`date "+%Y%m%d%H%M%S"`
-nvim  -c "normal I# ${name} " -c "startinsert!" $name.md
+nvim  -c "normal I# ${name} " -c "startinsert!" $HOME/notes/$name.md
