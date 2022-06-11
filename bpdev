@@ -8,15 +8,20 @@ tmux new-session -d -s $session
 window=1
 tmux rename-window -t $session:$window 'code'
 tmux send-keys -t $session:$window 'nvim .' C-m
+tmux split-window -h -p 40
+tmux selectp -t 2
+tmux send-keys -t $session:$window 'docker-compose up -d' C-m
+tmux send-keys -t $session:$window 'docker logs app-web-1 -f' C-m
+tmux selectp -t 1
 
 window=2
 tmux new-window -t $session:$window -n 'term'
 
-window=3
-tmux new-window -t $session:$window -n 'server'
-tmux send-keys -t $session:$window 'docker-compose up' C-m
+# window=3
+# tmux new-window -t $session:$window -n 'server'
+# tmux send-keys -t $session:$window 'docker-compose up' C-m
 
-window=4
+window=3
 tmux new-window -t $session:$window -n 'iex'
 tmux send-keys -t $session:$window 'iex' C-m
 

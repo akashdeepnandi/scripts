@@ -9,9 +9,12 @@ tmux new-session -d -s $session
 window=1
 tmux rename-window -t $session:$window 'code'
 tmux send-keys -t $session:$window 'nvim' C-m
-tmux split-window -v -p 35
+tmux split-window -h -p 40
 tmux selectp -t 2
-tmux send-keys -t $session:$window 'docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d; docker logs orta-node-api-1 -f;' C-m
+tmux send-keys -t $session:$window 'echo "Hello"' C-m
+tmux send-keys -t $session:$window 'docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d' C-m
+tmux send-keys -t $session:$window 'docker logs orta-node-api-1 -f' C-m
+tmux selectp -t 1
 
 window=2
 tmux new-window -t $session:$window -n 'term'
