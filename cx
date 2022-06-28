@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
 nx=$HOME/scripts/$1
-echo -e "#!/usr/bin/bash\n\n" > $nx
 chmod +x $nx
-nvim $nx
+nvim  -c "normal I#!/usr/bin/bashoo" -c "startinsert!" $nx

@@ -4,8 +4,10 @@ cd $HOME/notes
 if [ $# -eq 0 ]
   then
     rg "\d{14} " | fzf | tee | awk '{gsub(":#", "",$1); x=""; for(i=3; i<=NF; i++) x= x == ""? $i : sprintf("%s-%s",x,$i); print "["x"]""("$1")"}'
+    # rg "\d{14} " | fzf | tee | awk '{gsub(":#", "",$1); x=""; for(i=3; i<=NF; i++) x= x == ""? $i : sprintf("%s-%s",x,$i); print "["x"]""("$1")"}'
   else
-    rg "\d{14} " | fzf --filter "$1" | tee | awk '{gsub(":#", "",$1); x=""; for(i=3; i<=NF; i++) x= x == ""? $i : sprintf("%s-%s",x,$i); print "["x"]""("$1")"}'
+    # rg "\d{14} " | fzf --filter "$1" | tee | awk '{gsub(":#", "",$1); x=""; for(i=3; i<=NF; i++) x= x == ""? $i : sprintf("%s-%s",x,$i); print "["x"]""("$1")"}'
+    rg "\d{14} " | fzf --filter "$1" | tee | awk '{gsub(":#", "",$1); x=""; for(i=3; i<=NF; i++) x= x == ""? $i : sprintf("%s %s",x,$i); print "- ["x"]""("$1")"}'
 fi
 
 # files=`grep "$1" * 2>/dev/null | cut -d":" -f1 | sort -u`
