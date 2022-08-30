@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+filename=""
+
+cd $HOME/notes
+if [ $# -eq 0 ]
+  then
+    filename="$(rg '\d{14} ' | fzf | cut -d':' -f1)"
+  else
+    filename="$(rg '\d{14} ' | fzf --filter '$1' | cut -d':' -f1)"
+fi
+
+filepath="$HOME/notes/$filename"
+rm "$filepath"
+echo "$filepath deleted"

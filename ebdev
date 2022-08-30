@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+cd $HOME/code/projects/blog.eprobe
+
+session="ebdev"
+
+tmux new-session -d -s $session
+
+window=1
+tmux rename-window -t $session:$window 'code'
+tmux send-keys -t $session:$window 'nvim .' C-m
+tmux split-window -h -p 40
+tmux selectp -t 2
+tmux send-keys -t $session:$window 'hugo server -D' C-m
+tmux selectp -t 1
+
+window=2
+tmux new-window -t $session:$window -n 'term'
+
+window=1
+tmux attach-session -t $session:$window

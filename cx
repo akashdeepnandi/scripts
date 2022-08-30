@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-nx=$HOME/scripts/$1
-chmod +x $nx
+nx="$HOME/scripts/$1"
 nvim  -c "normal I#!/usr/bin/bashoo" -c "startinsert!" $nx
+chmod +x $nx

@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+script_path="$HOME/scripts/$1"
+
+rm "$script_path"
+echo "Deleted $script_path";
