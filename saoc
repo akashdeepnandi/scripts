@@ -1,0 +1,50 @@
+#!/usr/bin/bash
+y=""
+d=""
+if [ "$#" -ne 2 ]; then
+    echo "Please provide exactly two year and day as arguments:- saoc 15 02"
+    exit 1
+fi
+if [[ $(printenv | grep -c "^AOC_COOKIE=") -eq 0 ]]; then
+    echo "'AOC_COOKIE' is not set and exported."
+    exit 1
+fi
+
+current_dir=$(basename "$(pwd)")
+if [ "$current_dir" != "aoc2023" ]; then
+    echo "Please change to AoC root dir"
+    exit 1
+fi
+
+getDay () {
+  if [ "$1" -lt 10 ]; then
+    echo "0$1"
+  else
+    echo "$1"
+  fi
+}
+
+d=$(getDay $2)
+echo "Setting up AoC Workspace"
+echo "Year : 20$1"
+echo "Day  : $d"
+problem="y$1d$d"
+
+if [[ -d "$problem" ]]; then
+    echo "Directory Already Exists"
+    exit 1
+fi
+
+# open the problem in browser
+xdg-open https://adventofcode.com/20$1/day/$2
+mkdir $problem
+cd $problem
+
+# get aoc input
+echo "Getting the input..."
+curl --cookie "session=$AOC_COOKIE" https://adventofcode.com/20$1/day/$2/input -o input
+cp ../template/* .
+go mod init github.com/akashdeepnandi/advent-of-code/$problem
+cd ..
+go work use $problem
+cd $problem
