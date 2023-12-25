@@ -28,7 +28,7 @@ d=$(getDay $2)
 echo "Setting up AoC Workspace"
 echo "Year : 20$1"
 echo "Day  : $d"
-problem="y$1d$d"
+problem="y$1/d$d"
 
 if [[ -d "$problem" ]]; then
     echo "Directory Already Exists"
@@ -37,14 +37,19 @@ fi
 
 # open the problem in browser
 xdg-open https://adventofcode.com/20$1/day/$2
-mkdir $problem
+mkdir -p $problem
 cd $problem
+echo "$(pwd)"
 
 # get aoc input
 echo "Getting the input..."
 curl --cookie "session=$AOC_COOKIE" https://adventofcode.com/20$1/day/$2/input -o input
-cp ../template/* .
+cp -r ../../template/* .
+cd golang
 go mod init github.com/akashdeepnandi/advent-of-code/$problem
 cd ..
-go work use $problem
-cd $problem
+cp input cpp/
+cp input golang/
+cp input javascript/
+cp input python/
+rm input
