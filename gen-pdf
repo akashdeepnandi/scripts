@@ -64,8 +64,15 @@ if [ -z "$text" ]; then
   display_help
 fi
 
-# Generate the PDF
-# convert -size 595x842 xc:white -gravity center -pointsize "$textsize" -annotate 0 "$text" "$filename"
+convert -size 595x842 xc:white -gravity center -pointsize "$textsize" \
+  -annotate 0 "$text" "$filename" 2>/tmp/pdf_error.log
+
+# Check if convert failed
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to generate PDF. Check /tmp/pdf_error.log for details."
+    cat /tmp/pdf_error.log  # Display the error for debugging
+    exit 1
+fi
 
 echo "Generated: $filename"
 
