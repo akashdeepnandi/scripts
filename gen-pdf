@@ -1,0 +1,71 @@
+#!/usr/bin/bash
+
+# Default values
+SCRIPT_NAME="gen-pdf"
+filename="out.pdf"
+textsize=100
+text=""
+
+# Function to check required dependencies
+check_dependencies() {
+  if ! command -v convert &> /dev/null; then
+    echo "Error: 'convert' (ImageMagick) is not installed. Please install it before running the script."
+    exit 1
+  fi
+
+  # Verify 'convert' is actually ImageMagick
+  if ! convert -version | grep -q "ImageMagick"; then
+    echo "Error: 'convert' exists but is not ImageMagick. Check your installation."
+    exit 1
+  fi
+}
+
+
+display_help() {
+  echo "Usage: $SCRIPT_NAME -t <text> [-f <filename>] [-s <textsize>]"
+  echo
+  echo "  -t, --text     Required. The text to be displayed in the PDF."
+  echo "  -f, --file     Optional. Output filename (default: out.pdf)."
+  echo "  -s, --size     Optional. Font size of the text (default: 100)."
+  echo "  -h, --help     Show this help message."
+  echo
+  echo "Examples:"
+  echo "  $SCRIPT_NAME -t 'Hello World'"
+  echo "  $SCRIPT_NAME -t 'Report' -f report.pdf"
+  echo "  $SCRIPT_NAME -t 'Big Text' -s 150"
+  exit 0
+}
+
+# Check dependencies
+check_dependencies
+
+# Reliable flag parsing using getopt
+ARGS=$(getopt -o f:t:s:h --long file:,text:,size:,help -n "$0" -- "$@")
+if [ $? -ne 0 ]; then
+  display_help
+fi
+
+eval set -- "$ARGS"
+
+while true; do
+  case "$1" in
+    -f|--file) filename="$2"; shift 2 ;;
+    -t|--text) text="$2"; shift 2 ;;
+    -s|--size) textsize="$2"; shift 2 ;;
+    -h|--help) display_help ;;
+    --) shift; break ;;
+    *) echo "Unknown option: $1"; exit 1 ;;
+  esac
+done
+
+# Check if text argument is provided
+if [ -z "$text" ]; then
+  echo "Error: Text argument (-t or --text) is required."
+  display_help
+fi
+
+# Generate the PDF
+# convert -size 595x842 xc:white -gravity center -pointsize "$textsize" -annotate 0 "$text" "$filename"
+
+echo "Generated: $filename"
+

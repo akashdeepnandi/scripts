@@ -52,4 +52,5 @@ cp input cpp/
 cp input golang/
 cp input javascript/
 cp input python/
+cp input rust/
 rm input
