@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Check if inside a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "❌ Not inside a Git repository."
+  exit 1
+fi
+
+# Get list of branches: local and remote (excluding HEAD)
+branches=$(git branch --all | grep -v 'HEAD' | sed 's/^..//' | sort | uniq)
+
+# Use fzf to select a branch
+selected=$(echo "$branches" | fzf --prompt="Select a branch: ")
+
+if [ -z "$selected" ]; then
+  echo "❌ No branch selected."
+  exit 1
+fi
+
+# Determine if it's a remote branch
+if [[ "$selected" == remotes/* ]]; then
+  remote_branch="$selected"
+  # Extract branch name and remote name
+  remote_name=$(echo "$remote_branch" | cut -d'/' -f2)
+  branch_name=$(echo "$remote_branch" | cut -d'/' -f3-)
+
+  echo "🌐 Creating and switching to local branch: $branch_name from $remote_name/$branch_name"
+  git checkout -b "$branch_name" --track "$remote_branch"
+else
+  echo "🔄 Switching to existing local branch: $selected"
+  git checkout "$selected"
+fi
+

@@ -1,0 +1,223 @@
+#!/usr/bin/bash
+
+set -e
+
+START_TIME=$(date +%s)
+
+# Colors
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Usage check
+if [ $# -ne 1 ]; then
+  echo -e "${GREEN}Usage:${NC} $0 <domain_file>"
+  exit 1
+fi
+
+DOMAIN_FILE=$1
+
+if [ ! -f "$DOMAIN_FILE" ]; then
+  echo "File '$DOMAIN_FILE' does not exist."
+  exit 1
+fi
+
+# Create directories
+mkdir -p recon-data screenshots js-files recon-logs
+
+# ===================
+# Dependency checker
+# ===================
+
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+GO_TOOLS=("subfinder" "httpx" "gowitness" "assetfinder" "waybackurls" "getJS")
+PYTHON_TOOLS=("SecretFinder" "LinkFinder")
+
+declare -A GO_TOOL_REPOS=(
+  ["subfinder"]="github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest"
+  ["httpx"]="github.com/projectdiscovery/httpx/cmd/httpx@latest"
+  ["gowitness"]="github.com/sensepost/gowitness@latest"
+  ["assetfinder"]="github.com/tomnomnom/assetfinder@latest"
+  ["waybackurls"]="github.com/tomnomnom/waybackurls@latest"
+  ["getJS"]="github.com/003random/getJS@latest"
+)
+
+declare -A PYTHON_TOOL_REPOS=(
+  ["SecretFinder"]="https://github.com/m4ll0k/SecretFinder.git"
+  ["LinkFinder"]="https://github.com/GerbenJavado/LinkFinder.git"
+)
+
+BB_TOOLS_DIR="$HOME/bb-tools"
+mkdir -p "$BB_TOOLS_DIR"
+
+# ========================
+# Check core dependencies
+# ========================
+echo -e "${GREEN}[+] Checking core dependencies...${NC}"
+for dep in "go" "python3" "pip3" "git"; do
+  if ! command -v "$dep" &> /dev/null; then
+    echo "[!] $dep not found. Please install it and try again."
+    exit 1
+  fi
+done
+echo -e "${GREEN}[+] Core dependencies found.${NC}"
+
+# ========================
+# Install Go tools
+# ========================
+echo -e "${GREEN}[+] Checking Go tools...${NC}"
+for tool in "${GO_TOOLS[@]}"; do
+  if ! command -v "$tool" &> /dev/null; then
+    echo "[*] Installing $tool using go install..."
+    go install "${GO_TOOL_REPOS[$tool]}"
+  else
+    echo "[+] $tool is already installed."
+  fi
+done
+
+# Add Go bin to PATH if not already
+if [[ ":$PATH:" != *":$HOME/go/bin:"* ]]; then
+  echo 'export PATH="$HOME/go/bin:$PATH"' >> ~/.bashrc
+  export PATH="$HOME/go/bin:$PATH"
+  echo "[*] Added \$HOME/go/bin to PATH. Please restart your terminal if needed."
+fi
+
+# =========================
+# Install Python tools
+# =========================
+echo -e "${GREEN}[+] Checking Python tools...${NC}"
+for tool in "${PYTHON_TOOLS[@]}"; do
+  TOOL_DIR="$BB_TOOLS_DIR/$tool"
+  VENV_DIR="$TOOL_DIR/venv"
+  MAIN_SCRIPT=""
+
+  if [[ "$tool" == "SecretFinder" ]]; then
+    MAIN_SCRIPT="SecretFinder.py"
+  elif [[ "$tool" == "LinkFinder" ]]; then
+    MAIN_SCRIPT="linkfinder.py"
+  fi
+
+  if [[ ! -d "$TOOL_DIR" ]]; then
+    echo "[*] Cloning $tool..."
+    git clone "${PYTHON_TOOL_REPOS[$tool]}" "$TOOL_DIR"
+  else
+    echo "[+] $tool already cloned."
+  fi
+
+  if [[ ! -d "$VENV_DIR" ]]; then
+    echo "[*] Creating virtual environment for $tool..."
+    python3 -m venv "$VENV_DIR"
+  fi
+
+  echo "[*] Installing dependencies for $tool..."
+  source "$VENV_DIR/bin/activate"
+  pip install -U pip
+  if [[ -f "$TOOL_DIR/requirements.txt" ]]; then
+    pip install -r "$TOOL_DIR/requirements.txt"
+  fi
+  deactivate
+
+  # Create wrapper script in ~/bb-tools/bin
+  mkdir -p "$BB_TOOLS_DIR/bin"
+  WRAPPER="$BB_TOOLS_DIR/bin/${tool,,}"
+  cat > "$WRAPPER" <<EOF
+#!/bin/bash
+source "$VENV_DIR/bin/activate"
+python3 "$TOOL_DIR/$MAIN_SCRIPT" "\$@"
+deactivate
+EOF
+  chmod +x "$WRAPPER"
+done
+
+# Add ~/bb-tools/bin to PATH
+if [[ ":$PATH:" != *":$BB_TOOLS_DIR/bin:"* ]]; then
+  echo 'export PATH="$HOME/bb-tools/bin:$PATH"' >> ~/.bashrc
+  echo 'export PATH="$HOME/bb-tools/bin:$PATH"' >> ~/.zshrc
+  export PATH="$HOME/bb-tools/bin:$PATH"
+  echo "[*] Added \$HOME/bb-tools/bin to PATH. Please restart your terminal if needed."
+fi
+
+echo -e "${GREEN}[+] All tools are ready.${NC}"
+
+REQUIRED_TOOLS=("subfinder" "httpx" "gowitness" "assetfinder" "waybackurls" "getJS" "secretfinder" "linkfinder")
+
+echo -e "${GREEN}[+] Checking dependencies...${NC}"
+for tool in "${REQUIRED_TOOLS[@]}"; do
+  if ! command -v "$tool" &> /dev/null; then
+    echo "[!] $tool not found. Please install it and make sure it's in your PATH."
+    exit 1
+  fi
+done
+echo -e "${GREEN}[+] All dependencies found.${NC}"
+
+# ===================
+# Helper to run steps
+# ===================
+run_step() {
+  local step="$1"
+  shift
+  local cmd="$@"
+  local done_marker="recon-logs/.${step}.done"
+
+  if [ -f "$done_marker" ]; then
+    echo -e "${GREEN}[*] Skipping $step (already completed)${NC}"
+  else
+    echo -e "${GREEN}[+] Running $step...${NC}"
+    eval "$cmd"
+    if [ $? -eq 0 ]; then
+      touch "$done_marker"
+      echo -e "${GREEN}[+] Step $step completed.${NC}"
+    else
+      echo "[!] Step $step failed. Exiting."
+      exit 1
+    fi
+  fi
+}
+
+# ===================
+# Steps
+# ===================
+
+run_step "subdomain_enum" \
+  "subfinder -dL \"$DOMAIN_FILE\" -silent -o recon-data/all_subdomains.txt"
+
+run_step "live_scan" \
+  "httpx -l recon-data/all_subdomains.txt -silent -o recon-data/live_subdomains.txt"
+
+run_step "screenshots" \
+  "gowitness scan file -f recon-data/live_subdomains.txt"
+
+run_step "asset_discovery" \
+  "cat recon-data/all_subdomains.txt | assetfinder --subs-only | tee recon-data/assets.txt"
+
+run_step "waybackurls" \
+  "cat recon-data/all_subdomains.txt | waybackurls > recon-data/waybackurls.txt"
+
+run_step "getjs" \
+  "getJS --input recon-data/live_subdomains.txt --output recon-data/jsfiles.txt"
+
+# run_step "download_js" \
+#   "cat recon-data/jsfiles.txt | while read js; do wget -q --show-progress --directory-prefix=js-files \$js; done"
+
+run_step "download_js" \
+  "cat recon-data/jsfiles.txt | while read -r js; do \
+     if [[ -n \"\$js\" ]]; then \
+       wget -q --show-progress --directory-prefix=js-files \"\$js\" || echo \"Failed: \$js\" >> recon-logs/failed_js_downloads.txt; \
+     fi; \
+   done"
+
+run_step "secret_finder" \
+  "find js-files -name '*.js' | while read js; do secretfinder -i \"\$js\" -o cli; done > recon-data/secrets.txt"
+
+run_step "link_finder" \
+  "find js-files -name '*.js' | while read js; do linkfinder -i \"\$js\" -o cli; done > recon-data/links.txt"
+
+# ===================
+# Finish
+# ===================
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo -e "${GREEN}[✓] Recon completed in $((DURATION / 60)) min $((DURATION % 60)) sec.${NC}"
+
